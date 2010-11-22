@@ -41,6 +41,28 @@ sub new {
     return $class, $self;
 }
 
+=meth process
+
+Run the conversion of the URI into an eBook
+
+=cut
+
+sub process {
+    my ($self) = @_;
+
+    croak "We need a URI to process\n" if $self->{uri} eq '';
+    my $ua = LWP::UserAgent->new( agent => 'Mozilla/5.0', cookie_jar => {}, timeout => 300 );
+    my $response = $ua->get( $self->{uri} );
+    if ($response->is_success) {
+        my $main_content = extract_main_html( $response->decoded_content );
+        my $xhtml_content = $self->_get_xhtml( $main_content );
+        return $self->_build_epub( $xhtml_content );
+    } else {
+        $self->{errstr} = "We can't get the URI: " . $response->status_line() . "\n";
+        return 0;
+    }
+}
+
 =meth run
 
 The modulino part of this module.

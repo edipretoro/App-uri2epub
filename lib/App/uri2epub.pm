@@ -3,6 +3,8 @@ use warnings;
 package App::uri2epub;
 # ABSTRACT: a simple application to transform a URL into an ePub file.
 
+__PACKAGE__->run() unless caller;
+
 =meth new
 
 The constructor of App::uri2epub. 

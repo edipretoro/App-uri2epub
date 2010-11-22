@@ -55,8 +55,7 @@ sub process {
     my $response = $ua->get( $self->{uri} );
     if ($response->is_success) {
         my $main_content = extract_main_html( $response->decoded_content );
-        $self->_get_xhtml( $main_content );
-        return $self->_build_epub( $xhtml_content );
+        return $self->_build_epub( $main_content );
     } else {
         $self->{errstr} = "We can't get the URI: " . $response->status_line() . "\n";
         return 0;

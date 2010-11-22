@@ -110,6 +110,7 @@ sub _get_xhtml {
         . qq{</head>\n}
         . qq{\n}
         . qq{<body>\n}
+        . qq{<h1>} . $self->{response}->title . qq{</h1>\n}
         . $content
         . qq{</body>\n}
             . qq{</html>};

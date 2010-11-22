@@ -29,4 +29,15 @@ sub new {
 
     return $class, $self;
 }
+
+=meth run
+
+The modulino part of this module.
+
+=cut
+
+sub run {
+    my ($self) = @_;
+}
+
 1;

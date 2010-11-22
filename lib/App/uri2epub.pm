@@ -91,6 +91,32 @@ sub _build_epub {
     return 1;
 }
 
+sub _get_xhtml {
+    my ($self, $content) = @_;
+
+    from_to( $content, 'utf8', 'latin1' );
+    $self->{xhtml} = qq{<?xml version="1.0" encoding="UTF-8"?>\n}
+        . qq{<!DOCTYPE html\n}
+        . qq{     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n}
+        . qq{    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n}
+        . qq{\n}
+        . qq{<html xmlns="http://www.w3.org/1999/xhtml">\n}
+        . qq{<head>\n}
+        . qq{<title></title>\n}
+        . qq{<meta http-equiv="Content-Type" }
+        . qq{content="text/html; charset=iso-8859-1"/>\n}
+        . qq{<link rel="stylesheet" href="../styles/style.css" }
+        . qq{type="text/css"/>\n}
+        . qq{</head>\n}
+        . qq{\n}
+        . qq{<body>\n}
+        . $content
+        . qq{</body>\n}
+            . qq{</html>};
+    ( $self->{xhtml_fh}, $self->{xhtml_filename} ) = tempfile();
+    print { $self->{xhtml_fh} } $self->{xhtml};
+}
+
 =meth run
 
 The modulino part of this module.

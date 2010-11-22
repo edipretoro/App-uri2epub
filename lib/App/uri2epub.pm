@@ -54,13 +54,13 @@ sub process {
     my ($self) = @_;
 
     croak "We need a URI to process\n" if $self->{uri} eq '';
-    my $ua = LWP::UserAgent->new( agent => 'Mozilla/5.0', cookie_jar => {}, timeout => 300 );
-    my $response = $ua->get( $self->{uri} );
-    if ($response->is_success) {
-        my $main_content = extract_main_html( $response->decoded_content );
+    $self->{ua} = LWP::UserAgent->new( agent => 'Mozilla/5.0', cookie_jar => {}, timeout => 300 );
+    $self->{response} = $self->{ua}->get( $self->{uri} );
+    if ($self->{response}->is_success) {
+        my $main_content = extract_main_html( $self->{response}->decoded_content );
         return $self->_build_epub( $main_content );
     } else {
-        $self->{errstr} = "We can't get the URI: " . $response->status_line() . "\n";
+        $self->{errstr} = "We can't get the URI: " . $self->{response}->status_line() . "\n";
         return 0;
     }
 }

@@ -117,6 +117,14 @@ sub _get_xhtml {
     print { $self->{xhtml_fh} } $self->{xhtml};
 }
 
+sub _get_css {
+    my ($self) = @_;
+
+    ( $self->{css_fh}, $self->{css_filename} ) = tempfile();
+    print { $self->{css_fh} } "h1         { font-size: 110%; }\n";
+    print { $self->{css_fh} } "h2, h3, h4 { font-size: 100%; }\n";
+}
+
 =meth run
 
 The modulino part of this module.

@@ -65,6 +65,32 @@ sub process {
     }
 }
 
+sub _build_epub {
+    my ($self, $content) = @_;
+
+    if (not defined $content) {
+        $self->{errstr} = "We can't find the content of this page.";
+        return 0;
+    }
+
+    $self->_get_xhtml( $content );
+    $self->{epub_builder} = EBook::EPUB->new( filename => $self->{epub} );
+    $self->{epub_builder}->add_title( $self->{response}->title() );
+    $self->{epub_builder}->add_language( 'en' );
+    my $du = Data::UUID->new();
+    my $uuid = $du->create_from_name_str( NameSpace_URL, $self->{uri} );
+    {
+        # Ignore overridden UUID warning form EBook::EPUB.
+        local $SIG{__WARN__} = sub { };
+        $self->{epub_builder}->add_identifier( "urn:uuid:$uuid" );
+    }
+    $self->_get_css();
+    $self->{epub_builder}->copy_stylesheet( $self->{css_filename}, 'style.css' );
+    $self->{epub_builder}->copy_xhtml($self->{xhtml_filename}, 'content.xhtml' );
+    $self->{epub_builder}->pack_zip( $self->{epub} );
+    return 1;
+}
+
 =meth run
 
 The modulino part of this module.

@@ -35,6 +35,8 @@ The filename of the output.
 sub new {
     my ($class, %args) = @_;
     my $self = {};
+    $self->{uri} = $args{uri} || '';
+    $self->{epub} = $args{epub} || '';
 
     return $class, $self;
 }

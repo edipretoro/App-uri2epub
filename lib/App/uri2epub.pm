@@ -41,7 +41,7 @@ sub new {
     $self->{uri} = $args{uri} || '';
     $self->{epub} = $args{epub} || '';
 
-    return $class, $self;
+    bless $self, $class;
 }
 
 =meth process

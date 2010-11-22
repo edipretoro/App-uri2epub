@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+uri2epub -- turn an URI into an ePub file
+
+=head1 SYNOPSIS
+
+uri2epub --uri http://www.perl.com --epub perl.epub
+
+=cut

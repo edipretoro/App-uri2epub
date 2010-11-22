@@ -7,8 +7,11 @@ use Getopt::Long;
 use Pod::Usage;
 use HTML::ExtractMain qw( extract_main_html );
 use LWP::UserAgent;
-use Encode;
+use Encode qw( from_to );
 use EBook::EPUB;
+use Carp;
+use File::Temp qw( tempfile );
+use Data::UUID;
 
 __PACKAGE__->run() unless caller;
 

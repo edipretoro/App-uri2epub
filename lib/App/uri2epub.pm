@@ -109,7 +109,7 @@ sub _get_xhtml {
         . qq{<title></title>\n}
         . qq{<meta http-equiv="Content-Type" }
         . qq{content="text/html; charset=iso-8859-1"/>\n}
-        . qq{<link rel="stylesheet" href="../styles/style.css" }
+        . qq{<link rel="stylesheet" href="style.css" }
         . qq{type="text/css"/>\n}
         . qq{</head>\n}
         . qq{\n}

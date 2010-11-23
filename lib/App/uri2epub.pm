@@ -113,15 +113,19 @@ sub _get_xhtml {
         . qq{</body>\n}
             . qq{</html>};
     ( $self->{xhtml_fh}, $self->{xhtml_filename} ) = tempfile();
+    binmode( $self->{xhtml_fh}, ':utf8' );
     print { $self->{xhtml_fh} } $self->{xhtml};
+    close $self->{xhtml_fh};
 }
 
 sub _get_css {
     my ($self) = @_;
 
     ( $self->{css_fh}, $self->{css_filename} ) = tempfile();
+    binmode( $self->{css_fh}, ':utf8' );
     print { $self->{css_fh} } "h1         { font-size: 110%; }\n";
     print { $self->{css_fh} } "h2, h3, h4 { font-size: 100%; }\n";
+    close $self->{xhtml_fh};
 }
 
 =meth run

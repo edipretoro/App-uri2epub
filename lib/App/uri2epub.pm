@@ -85,7 +85,13 @@ sub _build_epub {
     }
     $self->_get_css();
     $self->{epub_builder}->copy_stylesheet( $self->{css_filename}, 'style.css' );
-    $self->{epub_builder}->copy_xhtml($self->{xhtml_filename}, 'content.xhtml' );
+    $self->{content_id} = $self->{epub_builder}->copy_xhtml($self->{xhtml_filename}, 'content.xhtml' );
+    $self->{epub_builder}->add_navpoint(
+        label       => "Chapter 1",
+        id          => $self->{content_id},
+        content     => 'content.xhtml',
+        play_order  => 1 # should always start with 1
+    );
     $self->{epub_builder}->pack_zip( $self->{epub} );
     return 1;
 }

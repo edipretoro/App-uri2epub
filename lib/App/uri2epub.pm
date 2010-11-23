@@ -7,7 +7,6 @@ use Getopt::Long;
 use Pod::Usage;
 use HTML::ExtractMain qw( extract_main_html );
 use LWP::UserAgent;
-use Encode qw( from_to );
 use EBook::EPUB;
 use Carp;
 use File::Temp qw( tempfile );
@@ -94,7 +93,6 @@ sub _build_epub {
 sub _get_xhtml {
     my ($self, $content) = @_;
 
-    from_to( $content, 'utf8', 'latin1' );
     $self->{xhtml} = qq{<?xml version="1.0" encoding="UTF-8"?>\n}
         . qq{<!DOCTYPE html\n}
         . qq{     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n}

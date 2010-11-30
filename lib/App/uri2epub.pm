@@ -11,6 +11,8 @@ use EBook::EPUB;
 use Carp;
 use File::Temp qw( tempfile );
 use Data::UUID;
+use Encode qw( decode );
+use HTML::Encoding 'encoding_from_http_message';
 
 __PACKAGE__->run() unless caller;
 
@@ -56,6 +58,8 @@ sub process {
     $self->{ua} = LWP::UserAgent->new( agent => 'Mozilla/5.0', cookie_jar => {}, timeout => 300 );
     $self->{response} = $self->{ua}->get( $self->{uri} );
     if ($self->{response}->is_success) {
+        my $charset = encoding_from_http_message($self->{response});
+        $self->{epub_title} = decode( $charset => $self->{response}->title );
         my $main_content = extract_main_html( $self->{response}->decoded_content );
         return $self->_build_epub( $main_content );
     } else {
@@ -74,7 +78,7 @@ sub _build_epub {
 
     $self->_get_xhtml( $content );
     $self->{epub_builder} = EBook::EPUB->new( filename => $self->{epub} );
-    $self->{epub_builder}->add_title( $self->{response}->title() );
+    $self->{epub_builder}->add_title( $self->{epub_title} );
     $self->{epub_builder}->add_language( 'en' );
     my $du = Data::UUID->new();
     my $uuid = $du->create_from_name_str( NameSpace_URL, $self->{uri} );
@@ -108,13 +112,13 @@ sub _get_xhtml {
         . qq{<head>\n}
         . qq{<title></title>\n}
         . qq{<meta http-equiv="Content-Type" }
-        . qq{content="text/html; charset=iso-8859-1"/>\n}
+        . qq{content="text/html; charset=UTF-8"/>\n}
         . qq{<link rel="stylesheet" href="style.css" }
         . qq{type="text/css"/>\n}
         . qq{</head>\n}
         . qq{\n}
         . qq{<body>\n}
-        . qq{<h1>} . $self->{response}->title . qq{</h1>\n}
+        . qq{<h1>} . $self->{epub_title} . qq{</h1>\n}
         . $content
         . qq{</body>\n}
             . qq{</html>};
